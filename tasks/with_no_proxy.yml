@@ -11,8 +11,9 @@
 
     - block:
       - name: Install pip
-        yum: python-pip
-        state: latest
+        yum:
+          name: python-pip
+          state: latest
 
       rescue:
         - name: Install epel
