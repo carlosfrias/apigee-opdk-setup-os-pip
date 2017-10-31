@@ -2,7 +2,6 @@
 # tasks file for apigee-opdk-setup-os-pip
 - block:
   - name: Update pip
-    become: yes
     pip:
       name: pip
       state: latest
@@ -17,12 +16,14 @@
 
       rescue:
         - name: Install epel
-          include_import:
+          import_role:
             name: apigee-opdk-setup-os-epel
 
         - name: Install pip
           yum: python-pip
           state: latest
+
+  become: yes
 
 - name: Update python packages
   tags: ['pip']
