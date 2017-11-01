@@ -27,7 +27,7 @@
 
   become: yes
 
-- name: Update python packages
+- name: Update pip packages
   tags: ['pip']
   become: yes
   pip:
@@ -35,6 +35,8 @@
     state: present
   with_items: "{{ pip_packages }}"
 
+# TODO: Put get-pip into its own role.
+#
 #  rescue:
 #    - name: Download pip package manager
 #      become: yes
@@ -57,7 +59,7 @@
 #        name: pip
 #        state: latest
 #
-#    - name: Update python packages
+#    - name: Update pip packages
 #      tags: ['pip']
 #      become: yes
 #      pip:
