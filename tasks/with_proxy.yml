@@ -1,38 +1,44 @@
 ---
-- name: Download pip package manager with proxy
-  become: yes
-  tags: ['pip-manager']
-  get_url:
-    url: https://bootstrap.pypa.io/get-pip.py
-    dest: /tmp/get-pip.py
-  when: pip_conf_dir is not defined
-  environment:
-    http_proxy: "{{ http_proxy }}"
-    https_proxy: "{{ https_proxy }}"
-    no_proxy: "{{ no_proxy }}"
+- block:
+  - name: Update pip
+    pip:
+      name: pip
+      state: latest
+    register: result
+    environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ https_proxy }}"
+      no_proxy: "{{ no_proxy }}"
 
-- name: Install pip package manager with proxy
-  become: yes
-  tags: ['pip-manager']
-  shell: python /tmp/get-pip.py
-  when: pip_conf_dir is not defined
-  environment:
-    http_proxy: "{{ http_proxy }}"
-    https_proxy: "{{ https_proxy }}"
-    no_proxy: "{{ no_proxy }}"
+  rescue:
 
-- name: Update pip
-  tags: ['pip']
-  become: yes
-  pip:
-    name: pip
-    state: latest
-  environment:
-    http_proxy: "{{ http_proxy }}"
-    https_proxy: "{{ https_proxy }}"
-    no_proxy: "{{ no_proxy }}"
+    - block:
+      - name: Install pip
+        yum:
+          name: python-pip
+          state: latest
+        environment:
+          http_proxy: "{{ http_proxy }}"
+          https_proxy: "{{ https_proxy }}"
+          no_proxy: "{{ no_proxy }}"
 
-- name: Update python packages with no proxy
+      rescue:
+        - name: Install epel
+          import_role:
+            name: apigee-opdk-setup-os-epel
+
+        - name: Install pip
+          yum:
+            name: python-pip
+            state: latest
+          environment:
+            http_proxy: "{{ http_proxy }}"
+            https_proxy: "{{ https_proxy }}"
+            no_proxy: "{{ no_proxy }}"
+
+  become: yes
+
+- name: Update pip packages
   tags: ['pip']
   become: yes
   pip:
@@ -43,3 +49,49 @@
     http_proxy: "{{ http_proxy }}"
     https_proxy: "{{ https_proxy }}"
     no_proxy: "{{ no_proxy }}"
+
+#- name: Download pip package manager with proxy
+#  become: yes
+#  tags: ['pip-manager']
+#  get_url:
+#    url: https://bootstrap.pypa.io/get-pip.py
+#    dest: /tmp/get-pip.py
+#    validate_certs: no
+#  when: pip_conf_dir is not defined
+#  environment:
+#    http_proxy: "{{ http_proxy }}"
+#    https_proxy: "{{ https_proxy }}"
+#    no_proxy: "{{ no_proxy }}"
+#
+#- name: Install pip package manager with proxy
+#  become: yes
+#  tags: ['pip-manager']
+#  shell: python /tmp/get-pip.py
+#  when: pip_conf_dir is not defined
+#  environment:
+#    http_proxy: "{{ http_proxy }}"
+#    https_proxy: "{{ https_proxy }}"
+#    no_proxy: "{{ no_proxy }}"
+#
+#- name: Update pip
+#  tags: ['pip']
+#  become: yes
+#  pip:
+#    name: pip
+#    state: latest
+#  environment:
+#    http_proxy: "{{ http_proxy }}"
+#    https_proxy: "{{ https_proxy }}"
+#    no_proxy: "{{ no_proxy }}"
+#
+#- name: Update python packages with no proxy
+#  tags: ['pip']
+#  become: yes
+#  pip:
+#    name: '{{ item }}'
+#    state: present
+#  with_items: "{{ pip_packages }}"
+#  environment:
+#    http_proxy: "{{ http_proxy }}"
+#    https_proxy: "{{ https_proxy }}"
+#    no_proxy: "{{ no_proxy }}"
