@@ -1,5 +1,7 @@
 [global]
 index-url = {{ pip_index_url }}
+
 {% if pip_trusted_hosts is defined %}
+[install]
 trusted-hosts = {{ pip_trusted_hosts }}
 {% endif %}
