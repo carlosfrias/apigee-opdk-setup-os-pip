@@ -1,6 +1,6 @@
 ---
 - block:
-  - name: Update pip
+  - name: Update pip with proxy
     pip:
       name: pip
       state: latest
@@ -13,7 +13,7 @@
   rescue:
 
     - block:
-      - name: Install pip
+      - name: Install pip with proxy
         yum:
           name: python-pip
           state: latest
@@ -23,11 +23,11 @@
           no_proxy: "{{ no_proxy }}"
 
       rescue:
-        - name: Install epel
+        - name: Install epel with proxy
           import_role:
             name: apigee-opdk-setup-os-epel
 
-        - name: Install pip
+        - name: Install pip with proxy
           yum:
             name: python-pip
             state: latest
@@ -38,7 +38,7 @@
 
   become: yes
 
-- name: Update pip packages
+- name: Update pip packages with proxy
   tags: ['pip']
   become: yes
   pip:
