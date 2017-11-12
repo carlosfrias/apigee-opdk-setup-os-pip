@@ -6,3 +6,5 @@ pip_packages:
 - passlib
 - urllib3
 - requests
+- six
+- pyOpenSSL
