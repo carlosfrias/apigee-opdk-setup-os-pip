@@ -1,10 +1,10 @@
 ---
 # defaults file for apigee-opdk-setup-os-pip/
-pip_packages:
-- httplib2
-- pexpect
-- passlib
-- urllib3
-- requests
-- six
-- pyOpenSSL
+#pip_packages:
+#- httplib2
+#- pexpect
+#- passlib
+#- urllib3
+#- requests
+#- six
+#- pyOpenSSL
