@@ -1,22 +1,40 @@
-Role Name
+Apigee OPDK Setup OS Pip
 =========
 
-A brief description of the role goes here.
+This role install pip packages. Additionally a custom repository for pip is configured if
+pip_index_url and pip_conf_dir are indicated.  
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role requires elevated system privilege.
+
+When the variables `pip_conf_dir` and `pip_index_url` are provided then this role assumes that a custom
+pip repository is required and will use the variables indicated below to construct the appropriate `pip.conf` file.
 
 Role Variables
 --------------
+| Variable Name | Description |
+| --- | --- |
+| pip_conf_dir | Location of pip.conf file.  |
+| pip_index_url | url of the custom repository |
+| http_proxy | proxy variable to use if set |
+| pip_trusted_hosts | Pip trusted hosts to use if set |
+| pip_packages | Collection containing the pip packages to install |
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+    pip_packages:
+    - httplib2
+    - pexpect
+    - passlib
+    - urllib3
+    - requests
+    - six
+    - pyOpenSSL
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None
 
 Example Playbook
 ----------------
@@ -25,17 +43,19 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: apigee-opdk-setup-os-pip }
 
 License
 -------
 
-BSD
+Apache 2.0
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Carlos Frias
+
+
 <!-- BEGIN Google Required Disclaimer -->
 
 # Not Google Product Clause
