@@ -1,8 +1,7 @@
 Apigee OPDK Setup OS Pip
 =========
 
-This role install pip packages. Additionally a custom repository for pip is configured if
-pip_index_url and pip_conf_dir are indicated.  
+This repository contains Ansible roles to pip packages for use on the Apigee platform.   
 
 Requirements
 ------------
