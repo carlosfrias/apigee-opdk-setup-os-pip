@@ -29,7 +29,7 @@
       http_proxy: "{{ http_proxy }}"
       https_proxy: "{{ https_proxy }}"
       no_proxy: "{{ no_proxy }}"
-    when: pip.stat.exists is true
+    when: pip.stat.exists == true
 
   become: yes
 
@@ -57,7 +57,7 @@
         https_proxy: "{{ https_proxy }}"
         no_proxy: "{{ no_proxy }}"
 
-  when: pip.stat.exists is false
+  when: pip.stat.exists == false
   become: yes
 
 - name: Update pip packages with proxy
