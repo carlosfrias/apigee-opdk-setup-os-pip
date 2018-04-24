@@ -13,9 +13,14 @@
     dest: "{{ pip_conf_dir }}/pip.conf"
   when: pip_conf_dir is defined and pip_index_url is defined
 
+- name: Check for pip
+  stat:
+    path: /usr/bin/pip
+  register: pip
+
 - block:
+
   - name: Update pip with proxy
-    become: yes
     pip:
       name: pip
       state: latest
@@ -24,36 +29,35 @@
       http_proxy: "{{ http_proxy }}"
       https_proxy: "{{ https_proxy }}"
       no_proxy: "{{ no_proxy }}"
+    when: pip.stat.exists is true
+
+  become: yes
+
+- block:
+  - name: Install pip with proxy
+    yum:
+      name: python-pip
+      state: latest
+    environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ https_proxy }}"
+      no_proxy: "{{ no_proxy }}"
 
   rescue:
+    - name: Install epel with proxy
+      import_role:
+        name: apigee-opdk-setup-os-epel
 
-    - block:
-      - name: Install pip with proxy
-        become: yes
-        yum:
-          name: python-pip
-          state: latest
-        environment:
-          http_proxy: "{{ http_proxy }}"
-          https_proxy: "{{ https_proxy }}"
-          no_proxy: "{{ no_proxy }}"
+    - name: Install pip with proxy
+      yum:
+        name: python-pip
+        state: latest
+      environment:
+        http_proxy: "{{ http_proxy }}"
+        https_proxy: "{{ https_proxy }}"
+        no_proxy: "{{ no_proxy }}"
 
-      rescue:
-        - name: Install epel with proxy
-          become: yes
-          import_role:
-            name: apigee-opdk-setup-os-epel
-
-        - name: Install pip with proxy
-          become: yes
-          yum:
-            name: python-pip
-            state: latest
-          environment:
-            http_proxy: "{{ http_proxy }}"
-            https_proxy: "{{ https_proxy }}"
-            no_proxy: "{{ no_proxy }}"
-
+  when: pip.stat.exists is false
   become: yes
 
 - name: Update pip packages with proxy
