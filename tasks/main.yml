@@ -26,9 +26,9 @@
       state: latest
     register: result
     environment:
-      http_proxy: "{{ http_proxy }}"
-      https_proxy: "{{ https_proxy }}"
-      no_proxy: "{{ no_proxy }}"
+      http_proxy: "{{ http_proxy | default('') }}"
+      https_proxy: "{{ https_proxy | default('') }}"
+      no_proxy: "{{ no_proxy | default('') }}"
     when: pip.stat.exists == true
 
   become: yes
@@ -39,9 +39,9 @@
       name: python-pip
       state: latest
     environment:
-      http_proxy: "{{ http_proxy }}"
-      https_proxy: "{{ https_proxy }}"
-      no_proxy: "{{ no_proxy }}"
+      http_proxy: "{{ http_proxy | default('') }}"
+      https_proxy: "{{ https_proxy | default('') }}"
+      no_proxy: "{{ no_proxy | default('') }}"
 
   rescue:
     - name: Install epel with proxy
@@ -53,9 +53,9 @@
         name: python-pip
         state: latest
       environment:
-        http_proxy: "{{ http_proxy }}"
-        https_proxy: "{{ https_proxy }}"
-        no_proxy: "{{ no_proxy }}"
+        http_proxy: "{{ http_proxy | default('') }}"
+        https_proxy: "{{ https_proxy | default('') }}"
+        no_proxy: "{{ no_proxy | default('') }}"
 
   when: pip.stat.exists == false
   become: yes
@@ -68,9 +68,9 @@
     state: present
   with_items: "{{ pip_packages }}"
   environment:
-    http_proxy: "{{ http_proxy }}"
-    https_proxy: "{{ https_proxy }}"
-    no_proxy: "{{ no_proxy }}"
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
+    no_proxy: "{{ no_proxy | default('') }}"
 
 #- name: Download pip package manager with proxy
 #  become: yes
@@ -81,9 +81,9 @@
 #    validate_certs: no
 #  when: pip_conf_dir is not defined
 #  environment:
-#    http_proxy: "{{ http_proxy }}"
-#    https_proxy: "{{ https_proxy }}"
-#    no_proxy: "{{ no_proxy }}"
+#    http_proxy: "{{ http_proxy | default('') }}"
+#    https_proxy: "{{ https_proxy | default('') }}"
+#    no_proxy: "{{ no_proxy | default('') }}"
 #
 #- name: Install pip package manager with proxy
 #  become: yes
@@ -91,9 +91,9 @@
 #  shell: python /tmp/get-pip.py
 #  when: pip_conf_dir is not defined
 #  environment:
-#    http_proxy: "{{ http_proxy }}"
-#    https_proxy: "{{ https_proxy }}"
-#    no_proxy: "{{ no_proxy }}"
+#    http_proxy: "{{ http_proxy | default('') }}"
+#    https_proxy: "{{ https_proxy | default('') }}"
+#    no_proxy: "{{ no_proxy | default('') }}"
 #
 #- name: Update pip
 #  tags: ['pip']
@@ -102,9 +102,9 @@
 #    name: pip
 #    state: latest
 #  environment:
-#    http_proxy: "{{ http_proxy }}"
-#    https_proxy: "{{ https_proxy }}"
-#    no_proxy: "{{ no_proxy }}"
+#    http_proxy: "{{ http_proxy | default('') }}"
+#    https_proxy: "{{ https_proxy | default('') }}"
+#    no_proxy: "{{ no_proxy | default('') }}"
 #
 #- name: Update python packages with no proxy
 #  tags: ['pip']
@@ -114,6 +114,6 @@
 #    state: present
 #  with_items: "{{ pip_packages }}"
 #  environment:
-#    http_proxy: "{{ http_proxy }}"
-#    https_proxy: "{{ https_proxy }}"
-#    no_proxy: "{{ no_proxy }}"
+#    http_proxy: "{{ http_proxy | default('') }}"
+#    https_proxy: "{{ https_proxy | default('') }}"
+#    no_proxy: "{{ no_proxy | default('') }}"
