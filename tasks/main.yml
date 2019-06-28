@@ -45,6 +45,7 @@
 
   rescue:
     - name: Install epel with proxy
+      tags: ['epel']
       import_role:
         name: apigee-opdk-setup-os-epel
 
