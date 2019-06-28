@@ -11,7 +11,7 @@
   template:
     src: pip.conf.j2
     dest: "{{ pip_conf_dir }}/pip.conf"
-  when: pip_conf_dir is defined and pip_index_url is defined
+  when: pip_conf_dir is defined
 
 - name: Check for pip
   stat:
