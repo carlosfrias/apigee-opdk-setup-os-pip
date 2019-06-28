@@ -65,9 +65,8 @@
   tags: ['pip']
   become: yes
   pip:
-    name: '{{ item }}'
+    name: '{{ pip_packages }}'
     state: present
-  with_items: "{{ pip_packages }}"
   environment:
     http_proxy: "{{ http_proxy | default('') }}"
     https_proxy: "{{ https_proxy | default('') }}"
