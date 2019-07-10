@@ -61,27 +61,27 @@
 
       rescue:
         - name: Download pip package manager with proxy
-            become: yes
-            tags: ['pip-manager']
-            get_url:
-              url: https://bootstrap.pypa.io/get-pip.py
-              dest: /tmp/get-pip.py
-              validate_certs: no
-            when: pip_conf_dir is not defined
-            environment:
-              http_proxy: "{{ http_proxy | default('') }}"
-              https_proxy: "{{ https_proxy | default('') }}"
-              no_proxy: "{{ no_proxy | default('') }}"
+          become: yes
+          tags: ['pip-manager']
+          get_url:
+            url: https://bootstrap.pypa.io/get-pip.py
+            dest: /tmp/get-pip.py
+            validate_certs: no
+          when: pip_conf_dir is not defined
+          environment:
+            http_proxy: "{{ http_proxy | default('') }}"
+            https_proxy: "{{ https_proxy | default('') }}"
+            no_proxy: "{{ no_proxy | default('') }}"
 
-          - name: Install pip package manager with proxy
-            become: yes
-            tags: ['pip-manager']
-            shell: python /tmp/get-pip.py
-            when: pip_conf_dir is not defined
-            environment:
-              http_proxy: "{{ http_proxy | default('') }}"
-              https_proxy: "{{ https_proxy | default('') }}"
-              no_proxy: "{{ no_proxy | default('') }}"
+        - name: Install pip package manager with proxy
+          become: yes
+          tags: ['pip-manager']
+          shell: python /tmp/get-pip.py
+          when: pip_conf_dir is not defined
+          environment:
+            http_proxy: "{{ http_proxy | default('') }}"
+            https_proxy: "{{ https_proxy | default('') }}"
+            no_proxy: "{{ no_proxy | default('') }}"
 
   when: pip.stat.exists == false
   become: yes
