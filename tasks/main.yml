@@ -20,31 +20,31 @@
 
 - name: Install pip using multiple approaches
   block:
-  - name: Install pip
-    yum:
-      name: python-pip
-      state: present
-    environment:
-      http_proxy: "{{ http_proxy | default('') }}"
-      https_proxy: "{{ https_proxy | default('') }}"
-      no_proxy: "{{ no_proxy | default('') }}"
+    - name: Install pip
+      yum:
+        name: python-pip
+        state: present
+      environment:
+        http_proxy: "{{ http_proxy | default('') }}"
+        https_proxy: "{{ https_proxy | default('') }}"
+        no_proxy: "{{ no_proxy | default('') }}"
 
   rescue:
     - name: Simple pip install failed, setting up epel repository and trying again...
       block:
-      - name: Install epel repository
-        tags: ['epel']
-        import_role:
-          name: apigee_opdk_setup_os_epel
+        - name: Install epel repository
+          tags: ['epel']
+          import_role:
+            name: apigee_opdk_setup_os_epel
 
-      - name: Install pip, after installing epel repository
-        yum:
-          name: python-pip
-          state: present
-        environment:
-          http_proxy: "{{ http_proxy | default('') }}"
-          https_proxy: "{{ https_proxy | default('') }}"
-          no_proxy: "{{ no_proxy | default('') }}"
+        - name: Install pip, after installing epel repository
+          yum:
+            name: python-pip
+            state: present
+          environment:
+            http_proxy: "{{ http_proxy | default('') }}"
+            https_proxy: "{{ https_proxy | default('') }}"
+            no_proxy: "{{ no_proxy | default('') }}"
 
       rescue:
         - name: Download pip installer
@@ -115,25 +115,25 @@
         - "'ERROR: {exc}' in pip_status.stderr"
 
     - block:
-      - name: RESCUE - Uninstall pip
-        yum:
-          name: python-pip
-          state: absent
+        - name: RESCUE - Uninstall pip
+          yum:
+            name: python-pip
+            state: absent
 
-      - name: RESCUE - Reinstall pip
-        yum:
-          name: python-pip
-          state: present
+        - name: RESCUE - Reinstall pip
+          yum:
+            name: python-pip
+            state: present
 
-      - name: Update managed system python modules
-        pip:
-          name: "{{ pip_packages }}"
-          state: present
-          executable: "{{ PIP_EXECUTABLE | default('/usr/bin/pip') }}"
-        environment:
-          http_proxy: "{{ http_proxy | default('') }}"
-          https_proxy: "{{ https_proxy | default('') }}"
-          no_proxy: "{{ no_proxy | default('') }}"
+        - name: Update managed system python modules
+          pip:
+            name: "{{ pip_packages }}"
+            state: present
+            executable: "{{ PIP_EXECUTABLE | default('/usr/bin/pip') }}"
+          environment:
+            http_proxy: "{{ http_proxy | default('') }}"
+            https_proxy: "{{ https_proxy | default('') }}"
+            no_proxy: "{{ no_proxy | default('') }}"
       when: reinstall_pip is defined and reinstall_pip is true
       become: true
 
