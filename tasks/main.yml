@@ -35,7 +35,7 @@
         - name: Install epel repository
           tags: ['epel']
           import_role:
-            name: apigee_opdk_setup_os_epel
+            name: apigee-opdk-setup-os-epel
 
         - name: Install pip, after installing epel repository
           yum:
